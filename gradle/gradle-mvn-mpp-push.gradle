@@ -39,12 +39,12 @@ def isReleaseBuild() {
 
 def getReleaseRepositoryUrl() {
   return hasProperty('RELEASE_REPOSITORY_URL') ? RELEASE_REPOSITORY_URL :
-          "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+    "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
 }
 
 def getSnapshotRepositoryUrl() {
   return hasProperty('SNAPSHOT_REPOSITORY_URL') ? SNAPSHOT_REPOSITORY_URL :
-          "https://oss.sonatype.org/content/repositories/snapshots/"
+    "https://oss.sonatype.org/content/repositories/snapshots/"
 }
 
 def getRepositoryUsername() {
@@ -103,7 +103,7 @@ publishing {
       }
     }
   }
-  
+
   // Use default artifact name for the JVM target
   publications {
     kotlinMultiplatform {
@@ -123,11 +123,19 @@ publishing {
   }
 
   repositories {
+//    maven {
+//      url isReleaseBuild() ? getReleaseRepositoryUrl() : getSnapshotRepositoryUrl()
+//      credentials {
+//        username getRepositoryUsername()
+//        password getRepositoryPassword()
+//      }
+//    }
     maven {
-      url isReleaseBuild() ? getReleaseRepositoryUrl() : getSnapshotRepositoryUrl()
+      name "GitHubPackages"
+      url 'https://maven.pkg.github.com/MateeDevs/core-and-lib' // Github Package
       credentials {
-        username getRepositoryUsername()
-        password getRepositoryPassword()
+        username project.property("githubUser") as String
+        password project.property("githubPAT") as String
       }
     }
     maven {
